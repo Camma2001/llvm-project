@@ -373,6 +373,14 @@ def : SysReg<"vl", 0xC20>;
 def : SysReg<"vtype", 0xC21>;
 def : SysReg<"vlenb", 0xC22>;
 
+//===-----------------------------------------------
+// User Matrix CSRs
+//===-----------------------------------------------
+def : SysReg<"mtype", 0xC43>;
+def : SysReg<"tilem", 0xC40>;
+def : SysReg<"tilek", 0xC42>;
+def : SysReg<"tilen", 0xC41>;
+
 //===--------------------------
 // Machine Custom CSR
 //===--------------------------

@@ -163,6 +163,7 @@ class RISCVAsmParser : public MCTargetAsmParser {
   OperandMatchResultTy parsePseudoJumpSymbol(OperandVector &Operands);
   OperandMatchResultTy parseJALOffset(OperandVector &Operands);
   OperandMatchResultTy parseVTypeI(OperandVector &Operands);
+  OperandMatchResultTy parseMTypeI(OperandVector &Operands);
   OperandMatchResultTy parseMaskReg(OperandVector &Operands);
 
   bool parseOperand(OperandVector &Operands, StringRef Mnemonic);
@@ -262,6 +263,7 @@ struct RISCVOperand : public MCParsedAsmOperand {
     Immediate,
     SystemRegister,
     VType,
+    MType,
   } Kind;
 
   bool IsRV64;
@@ -286,6 +288,10 @@ struct RISCVOperand : public MCParsedAsmOperand {
     unsigned Val;
   };
 
+  struct MTypeOp {
+    unsigned Val;
+  };
+
   SMLoc StartLoc, EndLoc;
   union {
     StringRef Tok;
@@ -293,6 +299,7 @@ struct RISCVOperand : public MCParsedAsmOperand {
     ImmOp Imm;
     struct SysRegOp SysReg;
     struct VTypeOp VType;
+    struct MTypeOp MType;
   };
 
   RISCVOperand(KindTy K) : MCParsedAsmOperand(), Kind(K) {}
@@ -319,6 +326,9 @@ public:
     case KindTy::VType:
       VType = o.VType;
       break;
+    case KindTy::MType:
+      MType = o.MType;
+      break;
     }
   }
 
@@ -329,6 +339,7 @@ public:
   }
   bool isImm() const override { return Kind == KindTy::Immediate; }
   bool isMem() const override { return false; }
+  bool isMTypeI() const { return Kind == KindTy::MType; }
   bool isSystemRegister() const { return Kind == KindTy::SystemRegister; }
   bool isVType() const { return Kind == KindTy::VType; }
 
@@ -816,6 +827,11 @@ public:
     return VType.Val;
   }
 
+  unsigned getMType() const {
+    assert(Kind == KindTy::MType && "Invalid type access!");
+    return MType.Val;
+  }
+
   void print(raw_ostream &OS) const override {
     auto RegName = [](unsigned Reg) {
       if (Reg)
@@ -840,6 +856,11 @@ public:
     case KindTy::VType:
       OS << "<vtype: ";
       RISCVVType::printVType(getVType(), OS);
+      OS << '>';
+      break;
+    case KindTy::MType:
+      OS << "<mtype: ";
+      RISCVVType::printVType(getMType(), OS);
       OS << '>';
       break;
     }
@@ -1228,6 +1249,13 @@ bool RISCVAsmParser::MatchAndEmitInstruction(SMLoc IDLoc, unsigned &Opcode,
         ErrorLoc,
         "operand must be "
         "e[8|16|32|64|128|256|512|1024],m[1|2|4|8|f2|f4|f8],[ta|tu],[ma|mu]");
+  }
+  case Match_InvalidMTypeI: {
+    SMLoc ErrorLoc = ((RISCVOperand &)*Operands[ErrorInfo]).getStartLoc();
+    return Error(
+        ErrorLoc,
+        "operand must be "
+        "e[8|16|32|64|128|256|512|1024]");
   }
   case Match_InvalidVMaskRegister: {
     SMLoc ErrorLoc = ((RISCVOperand &)*Operands[ErrorInfo]).getStartLoc();
@@ -1693,6 +1721,10 @@ OperandMatchResultTy RISCVAsmParser::parseMaskReg(OperandVector &Operands) {
   }
 
   return MatchOperand_Success;
+}
+
+OperandMatchResultTy RISCVAsmParser::parseMTypeI(OperandVector &Operands) {
+  return MatchOperand_NoMatch;
 }
 
 OperandMatchResultTy

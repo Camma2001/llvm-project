@@ -1347,3 +1347,4 @@ include "RISCVInstrInfoZfh.td"
 //===----------------------------------------------------------------------===//
 
 include "RISCVInstrInfoPULP.td"
+include "RISCVInstrInfoMX.td"

@@ -681,6 +681,8 @@ defm VWMULSU_V : VALU_MV_V_X<"vwmulsu", 0b111010>;
 
 // Vector Single-Width Integer Multiply-Add Instructions
 defm VMACC_V : VALUr_MV_V_X<"vmacc", 0b101101>;
+defm MXMACC_V : VALUr_MV_V_X<"mxmacc", 0b101100>;
+defm MXDOTP_V : VALUr_MV_V_X<"mxdotp", 0b101110>;
 defm VNMSAC_V : VALUr_MV_V_X<"vnmsac", 0b101111>;
 defm VMADD_V : VALUr_MV_V_X<"vmadd", 0b101001>;
 defm VNMSUB_V : VALUr_MV_V_X<"vnmsub", 0b101011>;
@@ -770,6 +772,7 @@ defm VFWMUL_V : VALU_FV_V_F<"vfwmul", 0b111000>;
 
 // Vector Single-Width Floating-Point Fused Multiply-Add Instructions
 defm VFMACC_V : VALUr_FV_V_F<"vfmacc", 0b101100>;
+defm MXFMACC_V : VMAC_FV_V_F<"mxfmacc", 0b110111>;
 defm VFNMACC_V : VALUr_FV_V_F<"vfnmacc", 0b101101>;
 defm VFMSAC_V : VALUr_FV_V_F<"vfmsac", 0b101110>;
 defm VFNMSAC_V : VALUr_FV_V_F<"vfnmsac", 0b101111>;

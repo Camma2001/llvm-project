@@ -1146,6 +1146,9 @@ let TargetPrefix = "riscv" in {
   defm vmadd : RISCVTernaryAAXA;
   defm vnmsub : RISCVTernaryAAXA;
 
+  defm mxmacc : RISCVTernaryAAXA;
+  defm mxdotp : RISCVTernaryAAXA;
+
   defm vwmaccu  : RISCVTernaryWide;
   defm vwmacc   : RISCVTernaryWide;
   defm vwmaccus : RISCVTernaryWide;
@@ -1202,6 +1205,8 @@ let TargetPrefix = "riscv" in {
   defm vfrdiv : RISCVBinaryAAX;
 
   defm vfwmul : RISCVBinaryABX;
+
+  defm mxfmacc : RISCVTernaryAAXA;
 
   defm vfmacc : RISCVTernaryAAXA;
   defm vfnmacc : RISCVTernaryAAXA;
@@ -1460,7 +1465,7 @@ let TargetPrefix = "riscv" in {
   foreach dim = [1, 2, 3, 4] in {
     def int_riscv_ssr_setup_bound_stride_#dim#d
         : GCCBuiltin<"__builtin_ssr_setup_bound_stride_"#dim#"d">,
-          Intrinsic<[], 
+          Intrinsic<[],
                     [llvm_i32_ty, llvm_i32_ty, llvm_i32_ty],
                     [IntrHasSideEffects]>,
           RISCVSSRIntrinsic;
@@ -1526,4 +1531,3 @@ let TargetPrefix = "riscv" in {
 let TargetPrefix = "riscv" in {
   def int_riscv_frep_infer : Intrinsic<[], [], []>;
 } // TargetPrefix = "riscv"
-
