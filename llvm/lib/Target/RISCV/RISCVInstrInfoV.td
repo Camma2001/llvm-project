@@ -772,7 +772,7 @@ defm VFWMUL_V : VALU_FV_V_F<"vfwmul", 0b111000>;
 
 // Vector Single-Width Floating-Point Fused Multiply-Add Instructions
 defm VFMACC_V : VALUr_FV_V_F<"vfmacc", 0b101100>;
-defm MXFMACC_V : VMAC_FV_V_F<"mxfmacc", 0b110111>;
+defm MXFMACC_V : VALU_FV_V_F<"mxfmacc", 0b110111>;
 defm VFNMACC_V : VALUr_FV_V_F<"vfnmacc", 0b101101>;
 defm VFMSAC_V : VALUr_FV_V_F<"vfmsac", 0b101110>;
 defm VFNMSAC_V : VALUr_FV_V_F<"vfnmsac", 0b101111>;
