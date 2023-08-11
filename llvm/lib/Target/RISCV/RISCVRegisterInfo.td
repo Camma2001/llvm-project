@@ -556,6 +556,59 @@ defvar VMaskVTs = [vbool1_t, vbool2_t, vbool4_t, vbool8_t, vbool16_t,
 def VMV0 : RegisterClass<"RISCV", VMaskVTs, 64, (add V0)> {
   let Size = 64;
 }
+// Matrix Registers
+
+def MTYPE  : RISCVReg<0, "mtype", ["mtype"]>;
+def TILEM  : RISCVReg<0, "tilem", ["tilem"]>;
+def TILEN  : RISCVReg<0, "tilen", ["tilen"]>;
+def TILEK  : RISCVReg<0, "tilek", ["tilek"]>;
+def TSIDX  : RISCVReg<0, "tsidx", ["tsidx"]>;
+
+let RegAltNameIndices = [ABIRegAltName] in {
+  foreach Index = 0-8 in {
+    def TR#Index : RISCVReg<Index, "tr"#Index, ["tr"#Index]>, DwarfRegNum<[!add(Index, 96)]>;
+  }
+
+  foreach Index = 0-1 in {
+    def ACC#Index : RISCVReg<Index, "acc"#Index, ["acc"#Index]>, DwarfRegNum<[!add(Index, 96)]>;
+  }
+}
+
+class TRReg<list<ValueType> regTypes, dag regList, int Vlmul>
+: RegisterClass<"RISCV",
+                regTypes,
+                64, // The maximum supported ELEN is 64.
+                regList> {
+int VLMul = Vlmul;
+int Size = !mul(Vlmul, 64);
+}
+
+class ACCReg<list<ValueType> regTypes, dag regList, int Vlmul>
+: RegisterClass<"RISCV",
+                regTypes,
+                64, // The maximum supported ELEN is 64.
+                regList> {
+int VLMul = Vlmul;
+int Size = !mul(Vlmul, 64);
+}
+
+def TRR : TRReg<[vint8m1_t, vint16m1_t, vint32m1_t, vint64m1_t,
+              vfloat16m1_t, vfloat32m1_t, vfloat64m1_t,
+              vint8mf2_t, vint8mf4_t, vint8mf8_t,
+              vint16mf2_t, vint16mf4_t, vint32mf2_t,
+              vfloat16mf4_t, vfloat16mf2_t, vfloat32mf2_t,
+              vbool64_t, vbool32_t, vbool16_t, vbool8_t, vbool4_t,
+              vbool2_t, vbool1_t],
+          (add (sequence "TR%u", 0, 7)), 1>;
+
+def ACCR : ACCReg<[vint8m1_t, vint16m1_t, vint32m1_t, vint64m1_t,
+              vfloat16m1_t, vfloat32m1_t, vfloat64m1_t,
+              vint8mf2_t, vint8mf4_t, vint8mf8_t,
+              vint16mf2_t, vint16mf4_t, vint32mf2_t,
+              vfloat16mf4_t, vfloat16mf2_t, vfloat32mf2_t,
+              vbool64_t, vbool32_t, vbool16_t, vbool8_t, vbool4_t,
+              vbool2_t, vbool1_t],
+          (add (sequence "ACC%u", 0, 1)), 1>;
 
 let RegInfos = XLenRI in {
 def GPRF16  : RegisterClass<"RISCV", [f16], 16, (add GPR)>;

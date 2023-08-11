@@ -4148,6 +4148,8 @@ defm PseudoVWMULSU : VPseudoVWMUL_VV_VX;
 // 12.13. Vector Single-Width Integer Multiply-Add Instructions
 //===----------------------------------------------------------------------===//
 defm PseudoVMACC  : VPseudoVMAC_VV_VX_AAXA;
+defm PseudoMXMACC : VPseudoVMAC_VV_VX_AAXA;
+defm PseudoMXDOTP : VPseudoVMAC_VV_VX_AAXA;
 defm PseudoVNMSAC : VPseudoVMAC_VV_VX_AAXA;
 defm PseudoVMADD  : VPseudoVMAC_VV_VX_AAXA;
 defm PseudoVNMSUB : VPseudoVMAC_VV_VX_AAXA;
@@ -4247,6 +4249,7 @@ defm PseudoVFWMUL : VPseudoVWMUL_VV_VF;
 // 14.6. Vector Single-Width Floating-Point Fused Multiply-Add Instructions
 //===----------------------------------------------------------------------===//
 defm PseudoVFMACC  : VPseudoVMAC_VV_VF_AAXA;
+defm PseudoMXFMACC : VPseudoVMAC_VV_VF_AAXA;
 defm PseudoVFNMACC : VPseudoVMAC_VV_VF_AAXA;
 defm PseudoVFMSAC  : VPseudoVMAC_VV_VF_AAXA;
 defm PseudoVFNMSAC : VPseudoVMAC_VV_VF_AAXA;
@@ -4708,6 +4711,8 @@ defm : VPatBinaryW_VV_VX<"int_riscv_vwmulsu", "PseudoVWMULSU", AllWidenableIntVe
 defm : VPatTernaryV_VV_VX_AAXA<"int_riscv_vmadd", "PseudoVMADD", AllIntegerVectors>;
 defm : VPatTernaryV_VV_VX_AAXA<"int_riscv_vnmsub", "PseudoVNMSUB", AllIntegerVectors>;
 defm : VPatTernaryV_VV_VX_AAXA<"int_riscv_vmacc", "PseudoVMACC", AllIntegerVectors>;
+defm : VPatTernaryV_VV_VX_AAXA<"int_riscv_mxmacc", "PseudoMXMACC", AllIntegerVectors>;
+defm : VPatTernaryV_VV_VX_AAXA<"int_riscv_mxdotp", "PseudoMXDOTP", AllIntegerVectors>;
 defm : VPatTernaryV_VV_VX_AAXA<"int_riscv_vnmsac", "PseudoVNMSAC", AllIntegerVectors>;
 
 //===----------------------------------------------------------------------===//
@@ -4804,6 +4809,7 @@ defm : VPatBinaryW_VV_VX<"int_riscv_vfwmul", "PseudoVFWMUL", AllWidenableFloatVe
 // 14.6. Vector Single-Width Floating-Point Fused Multiply-Add Instructions
 //===----------------------------------------------------------------------===//
 defm : VPatTernaryV_VV_VX_AAXA<"int_riscv_vfmacc", "PseudoVFMACC", AllFloatVectors>;
+defm : VPatTernaryV_VV_VX_AAXA<"int_riscv_mxfmacc", "PseudoMXFMACC", AllFloatVectors>;
 defm : VPatTernaryV_VV_VX_AAXA<"int_riscv_vfnmacc", "PseudoVFNMACC", AllFloatVectors>;
 defm : VPatTernaryV_VV_VX_AAXA<"int_riscv_vfmsac", "PseudoVFMSAC", AllFloatVectors>;
 defm : VPatTernaryV_VV_VX_AAXA<"int_riscv_vfnmsac", "PseudoVFNMSAC", AllFloatVectors>;
