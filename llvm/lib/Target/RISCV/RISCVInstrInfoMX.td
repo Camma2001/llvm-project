@@ -75,7 +75,7 @@ def MSETTSIDX : RVInstSetTile<0b1001, (outs GPR:$rd), (ins GPR:$rs1),
                          "msettsidx", "$rd, $rs1">;
 } // hasSideEffects = 1, mayLoad = 0, mayStore = 0
 
-foreach eew = [8, 16, 32] in {
+foreach eew = [8, 16, 32, 64] in {
   defvar w = !cast<RISCVWidth>("LSWidth" # eew);
 
   // Matrix Unit-Stride Instructions
