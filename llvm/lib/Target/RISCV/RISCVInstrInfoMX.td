@@ -63,27 +63,27 @@ class MatrixACCStore<bits<6> funct6, bits<3> width, string opcodestr>
 let hasSideEffects = 1, mayLoad = 0, mayStore = 0 in {
 
 def MSETMTI : RVInstSetMType<(outs GPR:$rd), (ins GPR:$rs1, MTypeIOp:$mtypei),
-                         "msetmti", "$rd, $rs1, $mtypei">;
+                         "OA_msetmti", "$rd, $rs1, $mtypei">;
 
 def MSETMTM : RVInstSetTile<0b0011, (outs GPR:$rd), (ins GPR:$rs1),
-                         "msettilem", "$rd, $rs1">;
+                         "OA_msettilem", "$rd, $rs1">;
 def MSETMTK : RVInstSetTile<0b0101, (outs GPR:$rd), (ins GPR:$rs1),
-                         "msettilek", "$rd, $rs1">;
+                         "OA_msettilek", "$rd, $rs1">;
 def MSETMTN : RVInstSetTile<0b0111, (outs GPR:$rd), (ins GPR:$rs1),
-                         "msettilen", "$rd, $rs1">;
+                         "OA_msettilen", "$rd, $rs1">;
 def MSETTSIDX : RVInstSetTile<0b1001, (outs GPR:$rd), (ins GPR:$rs1),
-                         "msettsidx", "$rd, $rs1">;
+                         "OA_msettsidx", "$rd, $rs1">;
 } // hasSideEffects = 1, mayLoad = 0, mayStore = 0
 
 foreach eew = [8, 16, 32, 64] in {
   defvar w = !cast<RISCVWidth>("LSWidth" # eew);
 
   // Matrix Unit-Stride Instructions
-  def MLE#eew#_A_M : MatrixVLoad<0x9, w, "mle"#eew#".v.a">, VLESched<eew>;
-  def MLE#eew#_B_M : MatrixVLoad<0xa, w, "mle"#eew#".v.b">, VLESched<eew>;
-  def MLE#eew#_C_M : MatrixVLoad<0x0, w, "mle"#eew#".v.c">, VLESched<eew>;
-  def MSE#eew#_A_M : MatrixVStore<0x9, w,  "mse"#eew#".v.a">, VSESched<eew>;
-  def MSE#eew#_B_M : MatrixVStore<0xa, w,  "mse"#eew#".v.b">, VSESched<eew>;
-  def MSE#eew#_C_M : MatrixVStore<0x0, w,  "mse"#eew#".v.c">, VSESched<eew>;
+  def MLE#eew#_A_M : MatrixVLoad<0x9, w, "OA_mle"#eew#".v.a">, VLESched<eew>;
+  def MLE#eew#_B_M : MatrixVLoad<0xa, w, "OA_mle"#eew#".v.b">, VLESched<eew>;
+  def MLE#eew#_C_M : MatrixVLoad<0x0, w, "OA_mle"#eew#".v.c">, VLESched<eew>;
+  def MSE#eew#_A_M : MatrixVStore<0x9, w,  "OA_mse"#eew#".v.a">, VSESched<eew>;
+  def MSE#eew#_B_M : MatrixVStore<0xa, w,  "OA_mse"#eew#".v.b">, VSESched<eew>;
+  def MSE#eew#_C_M : MatrixVStore<0x0, w,  "OA_mse"#eew#".v.c">, VSESched<eew>;
 
 }
